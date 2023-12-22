@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BusController;
+use App\Http\Controllers\FareController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SeatAllocationController;
@@ -31,6 +32,7 @@ Route::middleware(['auth', 'isAdmin'])->group(function () {
     Route::resource('bus', BusController::class);
     Route::resource('location', LocationController::class);
     Route::resource('trip', TripController::class);
+    Route::resource('fare', FareController::class);
 });
 
 // Only For Passenger

@@ -12,7 +12,8 @@ class FareController extends Controller
      */
     public function index()
     {
-        //
+        $fares = Fare::all();
+        return view('admin.fare.index', compact('fares'));
     }
 
     /**
@@ -20,7 +21,7 @@ class FareController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.fare.edit');
     }
 
     /**
@@ -28,7 +29,22 @@ class FareController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $rules = [
+            'fare_per_km' => 'required|numeric|between:0,9999999.99',
+            'effect_from' => 'required',
+        ];
+
+        $this->validate($request, $rules);
+
+        $fare = Fare::create([
+            'fare_per_km' => $request->input('fare_per_km'),
+            'effect_from' => $request->input('effect_from'),
+        ]);
+
+        if(!$fare){
+            return redirect()->back()->with('error', 'Fare failed to create!');
+        }
+        return redirect()->back()->with('success', 'Fare created successfully!');
     }
 
     /**
@@ -42,24 +58,46 @@ class FareController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Fare $fare)
+    public function edit(string $id)
     {
-        //
+        $fare = Fare::findOrFail($id);
+
+        return view('admin.fare.edit', compact('fare'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Fare $fare)
+    public function update(Request $request, String $id)
     {
-        //
+        $rules = [
+            'fare_per_km' => 'required|numeric|between:0,9999999.99',
+            'effect_from' => 'required',
+        ];
+
+        $this->validate($request, $rules);
+
+        $fare = Fare::findOrFail($id)->create([
+            'fare_per_km' => $request->input('fare_per_km'),
+            'effect_from' => $request->input('effect_from'),
+        ]);
+
+        if(!$fare){
+            return redirect()->back()->with('error', 'Fare failed to create!');
+        }
+        return redirect()->back()->with('success', 'Fare created successfully!');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Fare $fare)
+    public function destroy(string $id)
     {
-        //
+        $fare = Fare::findOrFail($id)->delete();
+
+        if(!$fare){
+            return redirect()->back()->with('error', 'Fare failed to delete!');
+        }
+        return redirect()->back()->with('success', 'Fare deleted successfully!');
     }
 }

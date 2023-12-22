@@ -62,7 +62,7 @@ class LocationController extends Controller
      */
     public function edit(string $id)
     {
-        $location = Location::find($id);
+        $location = Location::findOrFail($id);
         
         return view('admin.location.edit', compact('location'));
     }
@@ -80,7 +80,7 @@ class LocationController extends Controller
 
         $this->validate($request, $rules);
 
-        $location = Location::where('id', $id)->update([
+        $location = Location::findOrFail($id)->update([
             'place_name' => $request->input('place_name'),
             'distance_km' => $request->input('distance_km'),
             'stopage_order' => $request->input('stopage_order'),
@@ -96,6 +96,11 @@ class LocationController extends Controller
      */
     public function destroy(string $id)
     {
-        Location::where('id', $id)->delete();
+        $location = Location::findOrFail($id)->delete();
+
+        if(!$location){
+            return redirect()->back()->with('error', 'Location failed to delete!');
+        }
+        return redirect()->back()->with('success', 'Location deleted successfully!');
     }
 }
