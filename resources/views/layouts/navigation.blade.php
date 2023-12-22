@@ -11,11 +11,28 @@
                 </div>
 
                 <!-- Navigation Links -->
+                @if(Auth::user()->user_type == 'admin')
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('location.index')" :active="request()->routeIs(['location.index','location.create'])">
+                        {{ __('Location') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('bus.index')" :active="request()->routeIs(['bus.index', 'bus.create'])">
+                        {{ __('Bus') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('trip.index')" :active="request()->routeIs(['trip.index', 'trip.create'])">
+                        {{ __('Trip') }}
+                    </x-nav-link>
                 </div>
+                @else 
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('book.index')" :active="request()->routeIs('book.index')">
+                        {{ __('Booking') }}
+                    </x-nav-link>
+                </div>
+                @endif
             </div>
 
             <!-- Settings Dropdown -->

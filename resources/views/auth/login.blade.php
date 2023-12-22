@@ -44,4 +44,7 @@
             </x-primary-button>
         </div>
     </form>
+    <p class="mt-5 text-center">
+        Don't have account? <a class="underline" href="{{ route('register') }}">Register</a>
+    </p>
 </x-guest-layout>
