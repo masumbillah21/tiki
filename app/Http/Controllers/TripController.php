@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Bus;
 use App\Models\Trip;
+use App\Models\Location;
 use Illuminate\Http\Request;
 
 class TripController extends Controller
@@ -12,7 +14,10 @@ class TripController extends Controller
      */
     public function index()
     {
-        return view('admin.trip.index');
+
+        $trips = Trip::with(['bus', 'startLocation', 'endLocation'])->get();
+        
+        return view('admin.trip.index', compact('trips'));
     }
 
     /**
@@ -20,7 +25,9 @@ class TripController extends Controller
      */
     public function create()
     {
-        //
+        $locations = Location::all();
+        $buses = Bus::all();
+        return view('admin.trip.edit', compact('locations', 'buses'));
     }
 
     /**
@@ -28,7 +35,27 @@ class TripController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'bus_id' => ['required', 'exists:buses,id'],
+            'trip_date' => ['required'],
+            'trip_time' => ['required'],
+            'start_from' => ['required', 'exists:locations,id'],
+            'end_to' => ['required', 'exists:locations,id'],
+            
+        ]);
+
+        $bus = Trip::create([
+            'bus_id' => $request->bus_id,
+            'trip_date' => $request->trip_date,
+            'trip_time' => $request->trip_time,
+            'start_from' => $request->start_from,
+            'end_to' => $request->end_to,
+        ]);
+
+        if(!$bus){
+            return redirect()->back()->with('error', 'Trip failed to create!');
+        }
+        return redirect()->back()->with('success', 'Trip created successfully!');
     }
 
     /**
@@ -42,17 +69,40 @@ class TripController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Trip $trip)
+    public function edit(string $id)
     {
-        //
+        $locations = Location::all();
+        $buses = Bus::all();
+        $trip = Trip::findOrFail($id);
+        return view('admin.trip.edit', compact('trip', 'locations', 'buses'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Trip $trip)
+    public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'bus_id' => ['required', 'exists:buses,id'],
+            'trip_date' => ['required'],
+            'trip_time' => ['required'],
+            'start_from' => ['required', 'exists:locations,id'],
+            'end_to' => ['required', 'exists:locations,id'],
+            
+        ]);
+
+        $bus = Trip::findOrFail($id)->update([
+            'bus_id' => $request->bus_id,
+            'trip_date' => $request->trip_date,
+            'trip_time' => $request->trip_time,
+            'start_from' => $request->start_from,
+            'end_to' => $request->end_to,
+        ]);
+
+        if(!$bus){
+            return redirect()->back()->with('error', 'Trip failed to update!');
+        }
+        return redirect()->back()->with('success', 'Trip updated successfully!');
     }
 
     /**
