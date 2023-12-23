@@ -13,7 +13,7 @@ class BusController extends Controller
     public function index()
     {
         $buses = Bus::all();
-        return view('admin.bus.index', compact($buses));
+        return view('admin.bus.index', compact('buses'));
     }
 
     /**
@@ -32,14 +32,14 @@ class BusController extends Controller
         $request->validate([
             'bus_no' => ['required', 'string', 'max:255'],
             'supervisor_name' => ['required', 'string', 'max:255'],
-            'phone_number' => ['required', 'numeric', 'digits:11'],
+            'supervisor_number' => ['required', 'numeric', 'digits:11'],
             
         ]);
 
         $bus = Bus::create([
             'bus_no' => $request->bus_no,
             'supervisor_name' => $request->supervisor_name,
-            'phone_number' => $request->phone_number,
+            'supervisor_number' => $request->supervisor_number,
         ]);
 
         if(!$bus){
@@ -73,14 +73,14 @@ class BusController extends Controller
         $request->validate([
             'bus_no' => ['required', 'string', 'max:255'],
             'supervisor_name' => ['required', 'string', 'max:255'],
-            'phone_number' => ['required', 'numeric', 'digits:11'],
+            'supervisor_number' => ['required', 'numeric', 'digits:11'],
             
         ]);
 
         $bus = Bus::findOrFail($id)->update([
             'bus_no' => $request->bus_no,
             'supervisor_name' => $request->supervisor_name,
-            'phone_number' => $request->phone_number,
+            'supervisor_number' => $request->supervisor_number,
         ]);
 
         if(!$bus){
