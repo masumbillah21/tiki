@@ -18,18 +18,11 @@
         <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
             @include('layouts.guest-navigation')
 
-            <div class="w-full">
+            <div class="w-full mt-32">
                 {{ $slot }}
             </div>
         </div>
 
         <script src="{{asset('assets/js/datepicker.min.js')}}"></script>
-        <script>
-            const datapicker  = document.getElementById('trip-date');
-            new Datepicker(datapicker, {
-                todayHighlight: true,
-                minDate : new Date()
-            });
-        </script>
     </body>
 </html>
