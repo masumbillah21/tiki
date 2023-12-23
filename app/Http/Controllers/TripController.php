@@ -84,7 +84,7 @@ class TripController extends Controller
     {
         $request->validate([
             'bus_id' => ['required', 'exists:buses,id'],
-            'trip_date' => ['required'],
+            'trip_date' => ['required', 'date'],
             'trip_time' => ['required'],
             'start_from' => ['required', 'exists:locations,id'],
             'end_to' => ['required', 'exists:locations,id'],

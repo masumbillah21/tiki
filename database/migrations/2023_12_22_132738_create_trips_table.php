@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('bus_id')->constrained();
             $table->date('trip_date');
-            $table->time('trip_time');
+            $table->string('trip_time');
             $table->unsignedBigInteger('start_from');
             $table->foreign('start_from')->references('id')->on('locations')->cascadeOnUpdate()->restrictOnDelete();
             $table->unsignedBigInteger('end_to');

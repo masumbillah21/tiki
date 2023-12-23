@@ -32,5 +32,7 @@
                 {{ $slot }}
             </main>
         </div>
+
+        <script src="{{asset('assets/js/datepicker.min.js')}}"></script>
     </body>
 </html>

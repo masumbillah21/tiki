@@ -1,4 +1,6 @@
 <x-guest-layout>
+    <div class="flex sm:justify-center items-center">
+        <div class="w-full sm:max-w-md px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
     <div class="mb-4 text-sm text-gray-600">
         {{ __('This is a secure area of the application. Please confirm your password before continuing.') }}
     </div>
@@ -24,4 +26,6 @@
             </x-primary-button>
         </div>
     </form>
+    </div>
+    </div>
 </x-guest-layout>

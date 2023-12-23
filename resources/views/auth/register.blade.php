@@ -1,4 +1,6 @@
 <x-guest-layout>
+    <div class="flex sm:justify-center items-center">
+        <div class="w-full sm:max-w-md px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
     <form method="POST" action="{{ route('register') }}">
         @csrf
 
@@ -56,4 +58,6 @@
             </x-primary-button>
         </div>
     </form>
+    </div>
+    </div>
 </x-guest-layout>

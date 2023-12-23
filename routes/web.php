@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BookTripControler;
 use App\Http\Controllers\BusController;
 use App\Http\Controllers\FareController;
 use App\Http\Controllers\LocationController;
@@ -19,9 +20,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [BookTripControler::class, 'index'])->name('home');
+Route::get('/search', [BookTripControler::class, 'searchAvailability'])->name('search');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
