@@ -21,7 +21,7 @@ return new class extends Migration
             $table->foreign('trip_to')->references('id')->on('locations')->cascadeOnUpdate()->restrictOnDelete();
             $table->json('seat_no');
             $table->double('fare_per_seat');
-            $table->double('total_pare');
+            $table->double('total_fare');
             $table->boolean('is_cancel')->default(0)->index();
             $table->timestamps();
         });

@@ -65,34 +65,45 @@
             @if(isset($trip->message))
                 <p class="text-center">{{ $trip->message }}</p>
             @else
-            {{ $trip-> id }}
-            <form action="" method="POST">
-                <div class="flex flex-wrap items-center">
-                    <div class="w-full md:w-1/4 px-3">
-                        <x-input-label for="user-name" :value="__('Full Name *')" />
-                        <x-text-input type="text" id="user-name"  placeholder="Your full name" name="user_name" :value="old('user_name')"  required />
-                        <x-input-error :messages="$errors->get('user_name')" class="mt-2" />
-                    </div>
-                    <div class="w-full md:w-1/4 px-3">
-                        <x-input-label for="user-email" :value="__('Email *')" />
-                        <x-text-input type="email" id="user-email"  placeholder="Your email address" name="user_email" :value="old('user_email')"  required />
-                        <x-input-error :messages="$errors->get('user_email')" class="mt-2" />
-                    </div>
-                    <div class="w-full md:w-1/4 px-3">
-                        <x-input-label for="user-phone" :value="__('Phone Number *')" />
-                        <x-text-input type="tel" id="user-phone"  placeholder="Your phone number" name="user_phone" :value="old('user_phone')"  required />
-                        <x-input-error :messages="$errors->get('user_phone')" class="mt-2" />
-                    </div>
-                    <div class="w-full md:w-1/4 px-3">
-                        <x-primary-button class="mt-5" type="submt">
-                           {{ __('Book Ticket') }}
-                        </x-primary-button>
-                    </div>
+
+            <div class="p-4 mb-4 text-sm text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400" role="alert">
+                <p class="text-center text-3xl font-bold"><span class="font-extrabold">Route: </span> {{ $trip->startLocation->place_name }} = TO = {{ $trip->endLocation->place_name }}</p>
+            </div>
+            
+            
+            @if(Session::has('success'))
+                <div class="p-4 mb-4 text-sm text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400" role="alert">
+                    <span class="font-bold">Info: </span> {{ Session::get('success') }}
                 </div>
+            @elseif(Session::has('error'))
+                <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+                    <span class="font-bold">Info: </span> {{ Session::get('error') }}
+                </div>
+            @endif
+            
+            <form action="{{route('book.store')}}" method="POST">
+                @csrf
+                <x-text-input type="hidden" name="trip_id" :value="$trip->id" />
+                <x-text-input type="hidden" name="trip_from" :value="$fare->start_from" />
+                <x-text-input type="hidden" name="trip_to" :value="$fare->destination" />
+                <x-text-input type="hidden" name="fare_per_seat" :value="$fare->fare_amt" />
 
                 @php 
                     $seatGroup = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'];
                 @endphp
+                @auth
+                    <div class="text-center mt-10">
+                        <x-primary-button type="submt">
+                            {{__('Book Your Seat')}}
+                        </x-primary-button>
+                    </div>
+                @else 
+                <div class="text-center mt-10">
+                    <x-primary-button type="submt">
+                        {{__('Login To Book Your Seat')}}
+                    </x-primary-button>
+                </div>
+                @endauth
                 <div class="checkbox-group required">
                     <div class="mt-10">
                         <div class="relative overflow-x-auto">
@@ -100,22 +111,38 @@
                                 <tbody>
                                     @foreach($seatGroup as $group)
                                         <tr>
-                                            <td scope="row" class="py-3 border border-slate-300">
+                                            <td scope="row" class="w-52 py-3 border border-slate-300">
+                                                @if(in_array($group.'1', $seatArray))
+                                                    <strong class="text-green-900 uppercase">Booked</strong>
+                                                @else
                                                 <x-input-label :for="$group.'1'" :value="__($group.'1')"/>
                                                 <x-text-input :id="$group.'1'" type="checkbox" name="seat_no[]" :value="$group.'1'"/>
+                                                @endif
                                             </td>
-                                            <td class="border border-slate-300">
-                                                <x-input-label :for="$group.'2'" :value="__($group.'2')"/>
-                                                <x-text-input :id="$group.'2'" type="checkbox" name="seat_no[]" :value="$group.'2'"/>
+                                            <td class="w-52 py-3 border border-slate-300">
+                                                @if(in_array($group.'2', $seatArray))
+                                                    <strong class="text-green-900 uppercase">Booked</strong>
+                                                @else
+                                                    <x-input-label :for="$group.'2'" :value="__($group.'2')"/>
+                                                    <x-text-input :id="$group.'2'" type="checkbox" name="seat_no[]" :value="$group.'2'"/>
+                                                @endif
                                             </td>
-                                            <td width="100"></td>
-                                            <td class="border border-slate-300">
-                                                <x-input-label :for="$group.'3'" :value="__($group.'3')"/>
-                                                <x-text-input :id="$group.'3'" type="checkbox" name="seat_no[]" :value="$group.'3'"/>
+                                            <td class="w-28 py-3"></td>
+                                            <td class="w-52 py-3 border border-slate-300">
+                                                @if(in_array($group.'3', $seatArray))
+                                                    <span class="text-green-900 text-xs uppercase">Booked</span>
+                                                @else
+                                                    <x-input-label :for="$group.'3'" :value="__($group.'3')"/>
+                                                    <x-text-input :id="$group.'3'" type="checkbox" name="seat_no[]" :value="$group.'3'"/>
+                                                @endif
                                             </td>
-                                            <td class="border border-slate-300">
-                                                <x-input-label :for="$group.'4'" :value="__($group.'4')"/>
-                                                <x-text-input :id="$group.'4'" type="checkbox" name="seat_no[]" :value="$group.'4'"/>
+                                            <td class="w-52 py-3 border border-slate-300">
+                                                @if(in_array($group.'4', $seatArray))
+                                                    <span class="text-green-900 text-xs uppercase">Booked</span>
+                                                @else
+                                                    <x-input-label :for="$group.'4'" :value="__($group.'4')"/>
+                                                    <x-text-input :id="$group.'4'" type="checkbox" name="seat_no[]" :value="$group.'4'"/>
+                                                @endif
                                             </td>
                                         </tr>
                                     @endforeach
@@ -124,6 +151,22 @@
                         </div>
                     </div>
                 </div>
+                @php 
+                    $seatGroup = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'];
+                @endphp
+                @auth
+                    <div class="text-center mt-10">
+                        <x-primary-button type="submt">
+                            {{__('Book Your Seat')}}
+                        </x-primary-button>
+                    </div>
+                @else 
+                    <div class="text-center mt-10">
+                        <x-primary-button type="submt">
+                            {{__('Login To Book Your Seat')}}
+                        </x-primary-button>
+                    </div>
+                @endauth
             </form>
             @endif
         </div>

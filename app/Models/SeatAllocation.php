@@ -10,7 +10,7 @@ class SeatAllocation extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'trip_id', 'trip_from', 'trip_to', 'seat_no', 'fare_per_seat'];
+    protected $fillable = ['user_id', 'trip_id', 'trip_from', 'trip_to', 'seat_no', 'fare_per_seat', 'total_fare'];
 
     public function user():BelongsTo{
         return $this->belongsTo(User::class);
@@ -27,4 +27,8 @@ class SeatAllocation extends Model
     public function tripTo(): BelongsTo{
         return $this->belongsTo(Location::class, 'trip_to');
     }
+
+    protected $casts = [
+        'seat_no' => 'array',
+    ];
 }
