@@ -63,7 +63,9 @@
     <div class="flex sm:justify-center mt-10">
         <div class="w-full md:max-w-4xl px-6 py-2 bg-white shadow-md overflow-hidden sm:rounded-lg">
             @if(isset($trip->message))
-                <p class="text-center">{{ $trip->message }}</p>
+                <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+                    <p class="text-center text-3xl font-bold"><span class="font-extrabold">Info: </span> {{ $trip->message }}</p>
+                </div>
             @else
 
             <div class="p-4 mb-4 text-sm text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400" role="alert">
