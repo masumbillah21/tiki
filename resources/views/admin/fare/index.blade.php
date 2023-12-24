@@ -19,7 +19,16 @@
                                     SL
                                 </th>
                                 <th scope="col" class="px-6 py-3">
-                                    Fare Per KM
+                                    Base Location
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Start From
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Destination
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Fare Amount
                                 </th>
                                 <th scope="col" class="px-6 py-3">
                                     Effective Date
@@ -40,7 +49,16 @@
                                     {{ $loop->iteration }}
                                 </td>
                                 <td class="px-6 py-4">
-                                    {{ $fare->fare_per_km }}
+                                    {{ $fare->baseLocation->place_name }}
+                                </td>
+                                <td class="px-6 py-4">
+                                    {{ $fare->startFrom->place_name }}
+                                </td>
+                                <td class="px-6 py-4">
+                                    {{ $fare->destinationLocation->place_name }}
+                                </td>
+                                <td class="px-6 py-4">
+                                    Tk. {{ $fare->fare_amt }}
                                 </td>
                                 <td class="px-6 py-4">
                                     {{ $fare->effect_from }}

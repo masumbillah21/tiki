@@ -20,8 +20,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [BookTripControler::class, 'index'])->name('home');
-Route::get('/search', [BookTripControler::class, 'searchAvailability'])->name('search');
+Route::get('/', [SeatAllocationController::class, 'create'])->name('home');
+Route::get('/search', [SeatAllocationController::class, 'searchAvailability'])->name('search');
 
 Route::get('/dashboard', function () {
     return view('dashboard');

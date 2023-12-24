@@ -40,7 +40,7 @@ class TripController extends Controller
             'trip_date' => ['required'],
             'trip_time' => ['required'],
             'start_from' => ['required', 'exists:locations,id'],
-            'end_to' => ['required', 'exists:locations,id'],
+            'destination' => ['required', 'exists:locations,id'],
             
         ]);
 
@@ -49,7 +49,7 @@ class TripController extends Controller
             'trip_date' => $request->trip_date,
             'trip_time' => $request->trip_time,
             'start_from' => $request->start_from,
-            'end_to' => $request->end_to,
+            'destination' => $request->destination,
         ]);
 
         if(!$bus){
@@ -87,7 +87,7 @@ class TripController extends Controller
             'trip_date' => ['required', 'date'],
             'trip_time' => ['required'],
             'start_from' => ['required', 'exists:locations,id'],
-            'end_to' => ['required', 'exists:locations,id'],
+            'destination' => ['required', 'exists:locations,id'],
             
         ]);
 
@@ -96,7 +96,7 @@ class TripController extends Controller
             'trip_date' => $request->trip_date,
             'trip_time' => $request->trip_time,
             'start_from' => $request->start_from,
-            'end_to' => $request->end_to,
+            'destination' => $request->destination,
         ]);
 
         if(!$bus){

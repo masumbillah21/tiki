@@ -13,8 +13,14 @@ return new class extends Migration
     {
         Schema::create('fares', function (Blueprint $table) {
             $table->id();
-            $table->double('fare_per_km');
-            $table->timestamp('effect_from')->useCurrent();
+            $table->unsignedBigInteger('base_location');
+            $table->foreign('base_location')->references('id')->on('locations')->cascadeOnUpdate()->restrictOnDelete();
+            $table->unsignedBigInteger('start_from');
+            $table->foreign('start_from')->references('id')->on('locations')->cascadeOnUpdate()->restrictOnDelete();
+            $table->unsignedBigInteger('destination');
+            $table->foreign('destination')->references('id')->on('locations')->cascadeOnUpdate()->restrictOnDelete();
+            $table->double('fare_amt');
+            $table->date('effect_from')->useCurrent();
             $table->softDeletes();
             $table->timestamps();
         });

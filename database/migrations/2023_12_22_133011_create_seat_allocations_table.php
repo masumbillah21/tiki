@@ -15,11 +15,14 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained();
             $table->foreignId('trip_id')->constrained();
-            $table->string('trip_from');
-            $table->string('trip_to');
-            $table->string('seat_no');
+            $table->unsignedBigInteger('trip_from');
+            $table->foreign('trip_from')->references('id')->on('locations')->cascadeOnUpdate()->restrictOnDelete();
+            $table->unsignedBigInteger('trip_to');
+            $table->foreign('trip_to')->references('id')->on('locations')->cascadeOnUpdate()->restrictOnDelete();
+            $table->json('seat_no');
             $table->double('fare_per_seat');
-            $table->softDeletes();
+            $table->double('total_pare');
+            $table->boolean('is_cancel')->default(0)->index();
             $table->timestamps();
         });
     }

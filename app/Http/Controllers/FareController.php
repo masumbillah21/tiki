@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Fare;
+use App\Models\Location;
 use Illuminate\Http\Request;
 
 class FareController extends Controller
@@ -12,7 +13,8 @@ class FareController extends Controller
      */
     public function index()
     {
-        $fares = Fare::all();
+        $fares = Fare::with('baseLocation', 'startFrom', 'destinationLocation')->get();
+        
         return view('admin.fare.index', compact('fares'));
     }
 
@@ -21,7 +23,8 @@ class FareController extends Controller
      */
     public function create()
     {
-        return view('admin.fare.edit');
+        $locations = Location::all();
+        return view('admin.fare.edit', compact('locations'));
     }
 
     /**
@@ -30,14 +33,20 @@ class FareController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'fare_per_km' => 'required|numeric|between:0,9999999.99',
-            'effect_from' => 'required',
+            'base_location' => 'required|exists:locations,id',
+            'start_from' => 'required|exists:locations,id',
+            'destination' => 'required|exists:locations,id',
+            'fare_amt' => 'required|numeric|between:0,9999999.99',
+            'effect_from' => 'required|date',
         ];
 
         $this->validate($request, $rules);
 
         $fare = Fare::create([
-            'fare_per_km' => $request->input('fare_per_km'),
+            'base_location' => $request->input('base_location'),
+            'start_from' => $request->input('start_from'),
+            'destination' => $request->input('destination'),
+            'fare_amt' => $request->input('fare_amt'),
             'effect_from' => $request->input('effect_from'),
         ]);
 
@@ -60,9 +69,10 @@ class FareController extends Controller
      */
     public function edit(string $id)
     {
+        $locations = Location::all();
         $fare = Fare::findOrFail($id);
 
-        return view('admin.fare.edit', compact('fare'));
+        return view('admin.fare.edit', compact('fare', 'locations'));
     }
 
     /**
@@ -71,14 +81,20 @@ class FareController extends Controller
     public function update(Request $request, String $id)
     {
         $rules = [
-            'fare_per_km' => 'required|numeric|between:0,9999999.99',
-            'effect_from' => 'required',
+            'base_location' => 'required|exists:locations,id',
+            'start_from' => 'required|exists:locations,id',
+            'destination' => 'required|exists:locations,id',
+            'fare_amt' => 'required|numeric|between:0,9999999.99',
+            'effect_from' => 'required|date',
         ];
 
         $this->validate($request, $rules);
 
-        $fare = Fare::findOrFail($id)->create([
-            'fare_per_km' => $request->input('fare_per_km'),
+        $fare = Fare::findOrFail($id)->update([
+            'base_location' => $request->input('base_location'),
+            'start_from' => $request->input('start_from'),
+            'destination' => $request->input('destination'),
+            'fare_amt' => $request->input('fare_amt'),
             'effect_from' => $request->input('effect_from'),
         ]);
 

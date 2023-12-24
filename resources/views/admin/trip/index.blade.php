@@ -31,7 +31,7 @@
                                     Start From
                                 </th>
                                 <th scope="col" class="px-6 py-3">
-                                    End To
+                                    Destination
                                 </th>
                                 <th scope="col" class="px-6 py-3">
                                     Created At

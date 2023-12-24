@@ -28,18 +28,57 @@
                     @if(!empty($fare))
                         @method('PATCH')
                     @endif
-                    
-                    <!-- Fare Per KM -->
+                    <!-- Base Location -->
                     <div class="mb-3">
-                        <x-input-label for="fare-km" :value="__('Fare Per KM. *')" />
-                        <x-text-input id="fare-km" class="block mt-1 w-full" type="number" min="1" step="0.01" name="fare_per_km" :value="old('fare_per_km', empty($fare) ? '' : $fare->fare_per_km)"  required/>
-                        <x-input-error :messages="$errors->get('fare_per_km')" class="mt-2" />
+                        <x-input-label for="base-location" :value="__('Base Location *')" />
+                        <x-select id="base-location" name="base_location" required>
+                            @foreach($locations as $location)
+                                <option value="{{$location->id}}" {{ old('base_location', empty($fare) ? '' : $fare->base_location) == $location->id ? 'selected' : '' }}>{{$location->place_name}}</option>
+                            @endforeach
+                        </x-select>
+                        <x-input-error :messages="$errors->get('base_location')" class="mt-2" />
+                    </div>
+
+                    <!-- Start From -->
+                    <div class="mb-3">
+                        <x-input-label for="start-from" :value="__('Start From. *')" />
+                        <x-select id="start-from" name="start_from" required>
+                            @foreach($locations as $location)
+                                <option value="{{$location->id}}" {{ old('start_from', empty($fare) ? '' : $fare->start_from) == $location->id ? 'selected' : '' }}>{{$location->place_name}}</option>
+                            @endforeach
+                        </x-select>
+                        <x-input-error :messages="$errors->get('start_from')" class="mt-2" />
+                    </div>
+
+                    <!-- Destination -->
+                    <div class="mb-3">
+                        <x-input-label for="destination" :value="__('Destination *')" />
+                        <x-select id="destination" name="destination" required>
+                            @foreach($locations as $location)
+                                <option value="{{$location->id}}" {{ old('destination', empty($fare) ? '' : $fare->destination) == $location->id ? 'selected' : '' }}>{{$location->place_name}}</option>
+                            @endforeach
+                        </x-select>
+                        <x-input-error :messages="$errors->get('destination')" class="mt-2" />
+                    </div>
+                    
+                    <!-- Fare Amt -->
+                    <div class="mb-3">
+                        <x-input-label for="fare-amt" :value="__('Fare Amount *')" />
+                        <x-text-input id="fare-amt" class="block mt-1 w-full" type="number" min="1" step="0.01" name="fare_amt" :value="old('fare_amt', empty($fare) ? '' : $fare->fare_amt)"  required/>
+                        <x-input-error :messages="$errors->get('fare_amt')" class="mt-2" />
                     </div>
 
                     <!-- Effective Date -->
                     <div class="mb-3">
                         <x-input-label for="effect-from" :value="__('Effect From *')" />
-                        <x-text-input id="effect-from" class="block mt-1 w-full" type="text" name="effect_from" :value="old('effect_from', empty($fare) ? '' : $fare->effect_from)"  required/>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                                <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
+                                </svg>
+                            </div>
+                            <x-text-input datepicker datepicker-autohide datepicker-format="yyyy-mm-dd"  id="effect-from" class="block mt-1 w-full ps-10" type="text" name="effect_from" :value="old('effect_from', empty($fare) ? date('Y-m-d') : $fare->effect_from)"  required/>
+                        </div>
                         <x-input-error :messages="$errors->get('effect_from')" class="mt-2" />
                     </div>
 

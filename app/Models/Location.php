@@ -18,4 +18,8 @@ class Location extends Model
     public function trip(): HasMany{
         return $this->hasMany(Trip::class);
     }
+
+    public function seat(): HasMany{
+        return $this->hasMany(SeatAllocation::class);
+    }
 }

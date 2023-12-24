@@ -49,7 +49,7 @@
                                 <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
                                 </svg>
                             </div>
-                            <x-text-input datepicker datepicker-autohide datepicker-format="yyyy-mm-dd" type="text" id="trip-date" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date" name="trip_date" :value="old('trip_date', empty($trip) ? '' : $trip->trip_date)"  required />
+                            <x-text-input datepicker datepicker-autohide datepicker-format="yyyy-mm-dd" type="text" id="trip-date" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date" name="trip_date" :value="old('trip_date', empty($trip) ? date('Y-m-d') : $trip->trip_date)"  required />
                         </div>
                         <x-input-error :messages="$errors->get('trip_date')" class="mt-2" />
                     </div>
@@ -85,12 +85,12 @@
                     <!-- End To -->
                     <div class="mb-3">
                         <x-input-label for="end-to" :value="__('End To *')" />
-                        <x-select id="end-to" name="end_to" required>
+                        <x-select id="end-to" name="destination" required>
                             @foreach($locations as $location)
-                                <option value="{{$location->id}}" {{ old('end_to', empty($trip) ? '' : $trip->end_to) == $location->id ? 'selected' : '' }}>{{$location->place_name}}</option>
+                                <option value="{{$location->id}}" {{ old('destination', empty($trip) ? '' : $trip->destination) == $location->id ? 'selected' : '' }}>{{$location->place_name}}</option>
                             @endforeach
                         </x-select>
-                        <x-input-error :messages="$errors->get('end_to')" class="mt-2" />
+                        <x-input-error :messages="$errors->get('destination')" class="mt-2" />
                     </div>
 
                     <x-primary-button type="submt">
