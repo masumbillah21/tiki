@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BookTripControler;
 use App\Http\Controllers\BusController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FareController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\ProfileController;
@@ -23,9 +24,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [SeatAllocationController::class, 'create'])->name('home');
 Route::get('/search', [SeatAllocationController::class, 'searchAvailability'])->name('search');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
 // Only For Admin
 Route::middleware(['auth', 'isAdmin'])->group(function () {

@@ -11,6 +11,15 @@
         </div>
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                @if(Session::has('success'))
+                    <div class="p-4 mb-4 text-sm text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400" role="alert">
+                        <span class="font-bold">Info: </span> {{ Session::get('success') }}
+                    </div>
+                @elseif(Session::has('error'))
+                    <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+                        <span class="font-bold">Info: </span> {{ Session::get('error') }}
+                    </div>
+                @endif
                 <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
                     <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -68,6 +77,31 @@
                                 </td>
                                 <td class="px-6 py-4">
                                     <x-link-button :href="route('fare.edit', $fare->id)" active="true">Edit</x-link-button>
+                                    <x-danger-button
+                                        x-data=""
+                                        x-on:click.prevent="$dispatch('open-modal', 'confirm-fare-deletion-{{$fare->id}}')"
+                                    >{{ __('Delete') }}</x-danger-button>
+
+                                    <x-modal name="confirm-fare-deletion-{{$fare->id}}" focusable>
+                                        <form method="post" action="{{ route('fare.destroy', $fare->id) }}" class="p-6">
+                                            @csrf
+                                            @method('delete')
+
+                                            <h2 class="text-lg font-medium text-gray-900">
+                                                {{ __('Are you sure you want to delete fare?') }}
+                                            </h2>
+
+                                            <div class="mt-6 flex justify-end">
+                                                <x-secondary-button x-on:click="$dispatch('close')">
+                                                    {{ __('Cancel') }}
+                                                </x-secondary-button>
+
+                                                <x-danger-button class="ms-3">
+                                                    {{ __('Delete Fare') }}
+                                                </x-danger-button>
+                                            </div>
+                                        </form>
+                                    </x-modal>
                                 </td>
                             </tr>
                             @endforeach

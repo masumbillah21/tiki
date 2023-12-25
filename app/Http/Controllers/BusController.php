@@ -59,16 +59,16 @@ class BusController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Bus $bus)
+    public function edit(string $id)
     {
-        //$bus = Bus::findOrFail($id);
+        $bus = Bus::findOrFail($id);
         return view('admin.bus.edit', compact('bus'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Bus $bus)
+    public function update(Request $request, string $id)
     {
         $request->validate([
             'bus_no' => ['required', 'string', 'max:255'],
@@ -77,13 +77,13 @@ class BusController extends Controller
             
         ]);
 
-        $busUpdate = $bus->update([
+        $status = Bus::findOrFail($id)->update([
             'bus_no' => $request->bus_no,
             'supervisor_name' => $request->supervisor_name,
             'supervisor_number' => $request->supervisor_number,
         ]);
 
-        if(!$busUpdate){
+        if(!$status){
             return redirect()->back()->with('error', 'Bus failed to update!');
         }
         return redirect()->back()->with('success', 'Bus updated successfully!');
@@ -94,9 +94,9 @@ class BusController extends Controller
      */
     public function destroy(string $id)
     {
-        $bus = Bus::findOrFail($id)->delete();
+        $status = Bus::findOrFail($id)->delete();
 
-        if(!$bus){
+        if(!$status){
             return redirect()->back()->with('error', 'Bus failed to delete!');
         }
         return redirect()->back()->with('success', 'Bus deleted successfully!');

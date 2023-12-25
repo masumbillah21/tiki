@@ -72,6 +72,9 @@
                 <p class="text-center text-3xl font-bold"><span class="font-extrabold">Route: </span> {{ $trip->startLocation->place_name }} = TO = {{ $trip->endLocation->place_name }}</p>
             </div>
             
+            <div class="p-4 mb-4 text-sm text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400" role="alert">
+                <p class="text-center text-2xl font-bold"><span class="font-extrabold">Fare Per Seat: </span> Tk. {{ $fare->fare_amt }}</p>
+            </div>
             
             @if(Session::has('success'))
                 <div class="p-4 mb-4 text-sm text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400" role="alert">
@@ -83,7 +86,7 @@
                 </div>
             @endif
             
-            <form action="{{route('book.store')}}" method="POST">
+            <form id="book-seat" action="{{route('book.store')}}" method="POST">
                 @csrf
                 <x-text-input type="hidden" name="trip_id" :value="$trip->id" />
                 <x-text-input type="hidden" name="trip_from" :value="$fare->start_from" />
@@ -95,7 +98,7 @@
                 @endphp
                 @auth
                     <div class="text-center mt-10">
-                        <x-primary-button type="submt">
+                        <x-primary-button type="button" onclick="validateForm()">
                             {{__('Book Your Seat')}}
                         </x-primary-button>
                     </div>
@@ -108,8 +111,9 @@
                 @endauth
                 <div class="checkbox-group required">
                     <div class="mt-10">
-                        <div class="relative overflow-x-auto">
-                            <table class="w-full border-collapse border border-slate-400 text-sm text-center text-gray-500 dark:text-gray-400">
+                        <div class="relative overflow-x-auto text-center">
+                            <x-input-error :messages="$errors->get('seat_no')" class="mt-2" />
+                            <table class="my-4 w-full border-collapse border border-slate-400 text-sm text-center text-gray-500 dark:text-gray-400">
                                 <tbody>
                                     @foreach($seatGroup as $group)
                                         <tr>
@@ -132,7 +136,7 @@
                                             <td class="w-28 py-3"></td>
                                             <td class="w-52 py-3 border border-slate-300">
                                                 @if(in_array($group.'3', $seatArray))
-                                                    <span class="text-green-900 text-xs uppercase">Booked</span>
+                                                    <strong class="text-green-900 uppercase">Booked</strong>
                                                 @else
                                                     <x-input-label :for="$group.'3'" :value="__($group.'3')"/>
                                                     <x-text-input :id="$group.'3'" type="checkbox" name="seat_no[]" :value="$group.'3'"/>
@@ -140,7 +144,7 @@
                                             </td>
                                             <td class="w-52 py-3 border border-slate-300">
                                                 @if(in_array($group.'4', $seatArray))
-                                                    <span class="text-green-900 text-xs uppercase">Booked</span>
+                                                    <strong class="text-green-900 uppercase">Booked</strong>
                                                 @else
                                                     <x-input-label :for="$group.'4'" :value="__($group.'4')"/>
                                                     <x-text-input :id="$group.'4'" type="checkbox" name="seat_no[]" :value="$group.'4'"/>
@@ -150,15 +154,14 @@
                                     @endforeach
                                 </tbody>
                             </table>
+                            <x-input-error :messages="$errors->get('seat_no')" class="mt-2" />
                         </div>
                     </div>
                 </div>
-                @php 
-                    $seatGroup = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'];
-                @endphp
+                
                 @auth
                     <div class="text-center mt-10">
-                        <x-primary-button type="submt">
+                        <x-primary-button type="button" onclick="validateForm()">
                             {{__('Book Your Seat')}}
                         </x-primary-button>
                     </div>
@@ -170,9 +173,27 @@
                     </div>
                 @endauth
             </form>
+
+            <script>
+                function validateForm() {
+                    var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+                    var isChecked = Array.from(checkboxes).some(function(checkbox) {
+                        return checkbox.checked;
+                    });
+            
+                    if (!isChecked) {
+                        alert("You haven't book any seat yet.");
+                        return
+                    } else {
+                        document.getElementById('book-seat').submit();
+                    }
+                }
+            </script>
+
             @endif
         </div>
     </div>
     @endif;
       
+
 </x-guest-layout>

@@ -56,7 +56,7 @@ class SeatAllocationController extends Controller
 
         if($start_from == $end_to){
             
-            $trip['message'] = 'No trip found';
+            $trip['message'] = 'Wrong Selection';
             $trip = (object) $trip;
             
             return view('book-trip', compact('locations','trip', 'search'));
@@ -73,14 +73,12 @@ class SeatAllocationController extends Controller
             ->where('is_cancel', 0)
             ->first();
         
-
-        //dd($trip);
         
         if($trip == null){
             
-            $trip['message'] = 'No trip found';
+            $trip['message'] = 'Sorry, There is no trip available on this date';
             $trip = (object) $trip;
-            //dd($trip);
+            
             return view('book-trip', compact('locations','trip', 'search'));
         }
 
@@ -92,7 +90,6 @@ class SeatAllocationController extends Controller
             }
         }
 
-        //dd($seatArray);
 
         return view('book-trip', compact('locations','search','trip', 'seatArray', 'fare'));
     }
@@ -109,10 +106,11 @@ class SeatAllocationController extends Controller
             'seat_no' => 'required|array',
             'fare_per_seat' => 'required|numeric|between:0,9999999.99',
         ];
+        $message = [
+            'seat_no.required' => 'You haven\'t select any seat yet',
+        ];
+        $this->validate($request, $rules, $message);
 
-        $this->validate($request, $rules);
-
-        //dd($request->fare_per_seat * count($request->seat_no));
         $seat = SeatAllocation::create([
             'user_id' => Auth::id(),
             'trip_id' => $request->trip_id,

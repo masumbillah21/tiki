@@ -31,8 +31,11 @@
                 </div>
                 @else 
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('book.index')" :active="request()->routeIs('book.index')">
-                        {{ __('Booking') }}
+                    <x-nav-link :href="route('home')" :active="request()->routeIs('home')">
+                        {{ __('Book A Trip') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                        {{ __('Booking List') }}
                     </x-nav-link>
                 </div>
                 @endif
